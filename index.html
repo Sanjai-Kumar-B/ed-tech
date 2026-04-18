@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Junospace Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'Inter',sans-serif;background:#0f172a;height:100vh;overflow:hidden;transition: background-color 0.4s;}
+    .ms{font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;font-size:22px;line-height:1;display:inline-block;vertical-align:middle;font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;}
+
+    /* ── LOADING ── */
+    #loading{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#020617,#0c4a6e,#020617);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s;}
+    .lq-logo{width:80px;height:80px;background:linear-gradient(135deg,#7c3aed,#a78bfa);border-radius:24px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(124,58,237,.5);animation:pulse-glow 2s ease-in-out infinite;margin-bottom:24px;}
+    @keyframes pulse-glow{0%,100%{box-shadow:0 0 40px rgba(124,58,237,.4);transform:scale(1);}50%{box-shadow:0 0 80px rgba(124,58,237,.8);transform:scale(1.05);}}
+    #loading h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:2rem;font-weight:800;background:linear-gradient(135deg,#a78bfa,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px;}
+    #loading p{color:#6b7280;font-size:.875rem;}
+    .lbar-wrap{margin-top:32px;width:200px;height:4px;background:rgba(255,255,255,.1);border-radius:99px;overflow:hidden;}
+    .lbar{height:100%;width:0;background:linear-gradient(90deg, #7c3aed, #a78bfa);border-radius:99px;animation:lfill 1.8s ease-out forwards;}
+    @keyframes lfill{from{width:0}to{width:100%}}
+
+    /* ── LOGIN ── */
+    #login-wrap{display:none;width:100%;height:100vh;background:#f8f9fa;align-items:center;justify-content:center;padding:20px;position:fixed;inset:0;z-index:99999 !important;}
+    #login-wrap.show{display:flex !important;}
+    #login-card{width:100%;max-width:1080px;display:grid;grid-template-columns:1fr 1fr;border-radius:1.5rem;overflow:hidden;box-shadow:0 20px 60px rgba(53,37,205,.12);}
+    .lc-brand{background:linear-gradient(135deg, #a78bfa, #fbc2c3);padding:3rem;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+    html.dark-mode .lc-brand { background: #000000; }
+    .lc-brand::before{content:none;}
+    .lc-form{background:#fff;padding:3.5rem;display:flex;flex-direction:column;justify-content:center;}
+    .l-input{width:100%;padding:14px 16px 14px 44px;background:#f3f4f5;border:2px solid transparent;border-radius:1rem;font-size:.9rem;color:#191c1d;outline:none;transition:all .2s;}
+    .l-input:focus{background:#fff;border-color: #7c3aed;}
+    .l-input::placeholder{color:#777587;}
+    .l-igroup{position:relative;margin-bottom:1.2rem;}
+    .l-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#777587;pointer-events:none;font-size:20px;}
+    .l-btn{width:100%;background:#7c3aed;color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;padding:16px;border-radius:99px;border:none;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 8px 24px rgba(53,37,205,.3);transition:all .2s;margin-top:.5rem;}
+    .l-btn:hover{background:#8b5cf6;transform:translateY(-2px);}
+    .l-btn:active{transform:scale(.97);}
+    @media(max-width:700px){#login-card{grid-template-columns:1fr;}.lc-brand{display:none;}}
+
+    /* ── PORTAL (post-login) ── */
+    #portal{display:none !important;width:100%;height:100vh;flex-direction:row;position:fixed;inset:0;z-index:100;background:#ffffff;}
+    #portal.show{display:flex !important;}
+    html.dark-mode #portal { background:#000000; }
+
+    /* ── SIDEBAR ── */
+    #sidebar{width:268px;min-width:268px;height:100vh;background:#f8faff;display:flex;flex-direction:column;padding:1.75rem 1rem;border-right:1px solid rgba(0,0,0,.06);position:relative;z-index:50;}
+    #sidebar::before { content: none; }
+    .sb-logo{display:flex;align-items:center;gap:12px;padding:0 8px;margin-bottom:2.5rem;}
+    .sb-logo-icon{width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1));}
+    .sb-logo-text{font-family:'Plus Jakarta Sans',sans-serif;font-size:1.25rem;font-weight:900;color:#7c3aed;letter-spacing:-.02em;line-height:1;}
+    .sb-logo-sub{font-family:'Plus Jakarta Sans',sans-serif;font-size:.68rem;color:#64748b;font-weight:500;text-transform:uppercase;letter-spacing:.18em;margin-top:4px;}
+    .sb-nav{flex:1;display:flex;flex-direction:column;gap:4px;}
+    .nav-btn{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;border:none;background:transparent;color:#64748b;font-size:.88rem;font-weight:400;cursor:pointer;transition:all .18s;text-align:left;width:100%;font-family:'Inter',sans-serif;border-left:4px solid transparent;}
+    .nav-btn .ms{font-size:20px;transition:color .18s;}
+    .nav-btn:hover{background:rgba(124,58,237,.05);color:#7c3aed;}
+    .nav-btn.active{background:linear-gradient(90deg,rgba(124,58,237,.1),transparent);color:#7c3aed;border-left-color:#7c3aed;border-radius:0 12px 12px 0;}
+    .nav-btn.active .ms{color:#7c3aed;font-variation-settings:'FILL' 1;}
+    
+    .sb-bottom{border-top:1px solid rgba(0,0,0,.06);padding-top:1rem;margin-top:auto;}
+    .sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;}
+    .sb-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(124,58,237,.3);}
+    .sb-name{font-size:.85rem;font-weight:700;color:#0f172a;}
+    .sb-role{font-size:.7rem;color:#64748b;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+    .sb-logout{margin-left:auto;background:none;border:none;cursor:pointer;color:#64748b;padding:6px;border-radius:8px;display:flex;align-items:center;transition:all .2s;}
+    .sb-logout:hover{color:#ef4444;background:rgba(239,68,68,.1);}
+
+    /* ── GLOBAL HEADER ── */
+    #portal-main{flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;background:#f8faff;}
+    #portal-header{height:64px;min-height:64px;background:#ffffff;border-bottom:1px solid rgba(0,0,0,.05);display:flex;align-items:center;padding:0 2rem;gap:2rem;z-index:45;}
+    .back-btn{background:none;border:none;color:#64748b;cursor:pointer;display:flex;align-items:center;gap:4px;font-size:.85rem;font-weight:600;padding:8px;border-radius:8px;transition:all .2s;}
+    .back-btn:hover{background:rgba(0,0,0,.04);color:#0f172a;}
+    .header-title{font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.1rem;color:#0f172a;}
+    .header-actions{margin-left:auto;display:flex;align-items:center;gap:1rem;}
+    .action-icon{color:#64748b;font-size:22px;cursor:pointer;position:relative;transition:color .2s;}
+    .action-icon:hover{color:#7c3aed;}
+    .action-sep{width:1px;height:24px;background:rgba(0,0,0,.06);margin:0 4px;}
+
+    /* ── CONTENT AREA ── */
+    #content-area{flex:1;position:relative;overflow:hidden;}
+    #content-frame{width:100%;height:100%;border:none;display:block;}
+
+    /* ── PAGE TRANSITION ── */
+    #overlay{position:absolute;inset:0;background:rgba(15,23,42,.8);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+    #overlay.show{opacity:1;pointer-events:all;}
+    .spinner{width:44px;height:44px;border:3px solid rgba(124,58,237,.2);border-top-color:#7c3aed;border-radius:50%;animation:spin .7s linear infinite;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* ── TOAST ── */
+    #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+    /* ── DARK MODE GLOBAL OVERRIDES ── */
+    html.dark-mode body { background: #000000; color: #f8fafc; }
+    html.dark-mode #login-card { background: #0a0c10; border: 1px solid rgba(255,255,255,0.05); }
+    html.dark-mode .lc-brand { background: linear-gradient(135deg, #4c1d95, #1e1b4b); }
+    html.dark-mode .lc-form { background: #0a0c10; }
+    html.dark-mode .l-input { background: #14171c; color: #ffffff; border-color: rgba(255,255,255,0.05); }
+    html.dark-mode label { color: #8b5cf6 !important; }
+    html.dark-mode .lc-form h2 { color: #ffffff !important; }
+    html.dark-mode .lc-form p { color: #94a3b8 !important; }
+    html.dark-mode #sidebar { background: #000000; border-right-color: rgba(139, 92, 246, 0.2); }
+    html.dark-mode #sidebar::before { content: none; }
+    html.dark-mode .nav-btn.active { color: #8b5cf6; border-color: #8b5cf6; }
+    html.dark-mode #loading { background: #000000; }
+    html.dark-mode #portal-main { background: #000000; }
+    html.dark-mode #portal-header { background: #0a0a0a; border-color: rgba(139, 92, 246, 0.2); }
+    html.dark-mode .action-icon:hover { color: #8b5cf6; }
+    html.dark-mode .mn-btn.active { color: #8b5cf6; }
+
+    /* ── RESPONSIVE BEHAVIOR (Shell) ── */
+    #mobile-header { display: none; height: 60px; background: #fff; align-items: center; justify-content: space-between; padding: 0 1rem; border-bottom: 1px solid rgba(0,0,0,.05); position: sticky; top: 0; z-index: 60; }
+    html.dark-mode #mobile-header { background: #0f172a; border-color: rgba(255,255,255,0.05); }
+    
+    #mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; height: 70px; background: rgba(255,255,255,0.85); backdrop-filter: blur(12px); border-top: 1px solid rgba(0,0,0,.05); z-index: 100; align-items: center; justify-content: space-around; padding: 0 10px; }
+    html.dark-mode #mobile-nav { background: rgba(15,23,42,0.85); border-color: rgba(255,255,255,0.05); }
+
+    .mn-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; border: none; background: none; color: #64748b; cursor: pointer; transition: all 0.2s; min-width: 60px; }
+    .mn-btn .ms { font-size: 24px; transition: transform 0.2s; }
+    .mn-btn span:last-child { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em; }
+    .mn-btn.active { color: #70ACE0; }
+    .mn-btn.active .ms { font-variation-settings: 'FILL' 1; transform: translateY(-2px); }
+
+    @media (max-width: 768px) {
+      #sidebar { display: none !important; }
+      #portal { flex-direction: column; }
+      #portal-header { display: none; }
+      #content-area { height: calc(100vh - 130px); } /* header + nav */
+      #mobile-header, #mobile-nav { display: flex; }
+      #login-card { grid-template-columns: 1fr; border-radius: 1rem; }
+      .lc-brand { height: 200px; padding: 1rem; flex-direction: row !important; }
+      .lc-brand svg { width: 150px; height: 150px; }
+      .lc-brand img { width: 60px; height: 60px; margin-bottom: 0 !important; }
+      .lc-brand h1 { font-size: 1.8rem !important; margin-left: 10px !important; }
+      .lc-form { padding: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <img src="logo.png" style="width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,0.1));margin-bottom:1rem;" alt="Junospace Logo"/>
+  <h1>Junospace</h1>
+  <p>Initialising your portal…</p>
+  <div class="lbar-wrap"><div class="lbar"></div></div>
+</div>
+
+<!-- LOGIN -->
+<div id="login-wrap">
+  <div id="login-card">
+    <!-- Brand side -->
+    <div class="lc-brand" style="justify-content:center; align-items:center;">
+      <style>
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+      </style>
+      <div style="position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; width:400px; height:400px;">
+        
+        <svg viewBox="0 0 200 200" style="position:absolute; inset:0; width:100%; height:100%; animation: spin 24s linear infinite; pointer-events:none;">
+          <defs>
+            <path id="circlePath" d="M 100, 100 m -85, 0 a 85,85 0 1,1 170,0 a 85,85 0 1,1 -170,0" fill="transparent" />
+          </defs>
+          <text font-family="Plus Jakarta Sans, sans-serif" font-weight="700" font-size="13" fill="rgba(255,255,255,0.6)" letter-spacing="3.5">
+            <textPath href="#circlePath">CREATE WHAT YOU USE • CREATE WHAT YOU USE • CREATE WHAT YOU USE • </textPath>
+          </text>
+        </svg>
+
+        <img src="logo.png" onclick="toggleTheme()" style="width:130px; height:130px; object-fit:contain; filter:drop-shadow(0 12px 24px rgba(0,0,0,0.35)); margin-bottom:1.5rem; position:relative; z-index:2; cursor:pointer; transition: transform 0.2s;" onmouseenter="this.style.transform='scale(1.1)'" onmouseleave="this.style.transform='scale(1)'" alt="Junospace Logo"/>
+        <h1 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:2.8rem; font-weight:800; color:#fff; position:relative; z-index:2; margin:0; letter-spacing:-0.03em; cursor:pointer;" onclick="toggleTheme()">Junospace</h1>
+        
+      </div>
+    </div>
+    <!-- Form side -->
+    <div class="lc-form">
+      <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:1.8rem;font-weight:700;color:#191c1d;margin-bottom:6px;">Welcome Back</h2>
+      <p style="color:#464555;font-size:.88rem;margin-bottom:2rem;">Enter your credentials to access your dashboard.</p>
+      <div class="l-igroup">
+        <span class="ms l-icon">person</span>
+        <input class="l-input" type="text" id="uid" placeholder="Student ID / Email"/>
+      </div>
+      <label style="font-size:.78rem;font-weight:600;color:#191c1d;display:flex;justify-content:space-between;margin-bottom:8px;">Password <a href="#" onclick="requestPasswordReset(event)" style="color:#7c3aed;text-decoration:none;font-weight:700;">Forgot?</a></label>
+      <div class="l-igroup">
+        <span class="ms l-icon">lock</span>
+        <input class="l-input" type="password" id="upw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/>
+      </div>
+      <button class="l-btn" onclick="doLogin()">
+        Sign In to Portal <span class="ms" style="font-size:20px;">arrow_forward</span>
+      </button>
+      <p style="margin-top:2rem;text-align:center;color:#464555;font-size:.82rem;">Don't have an account? <a href="#" style="color:#7c3aed;font-weight:700;text-decoration:none;">Request Access</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- PORTAL -->
+<div id="portal">
+  <!-- Mobile Header (Mobile Only) -->
+  <header id="mobile-header">
+    <button onclick="goBack()" class="ms" style="color:#64748b; background:none; border:none; cursor:pointer; font-size:24px;">arrow_back_ios</button>
+    <div style="display:flex; align-items:center; gap:10px; margin-right:auto; margin-left:10px;">
+        <img src="logo.png" style="width:30px;height:30px;object-fit:contain;" alt="Logo"/>
+        <h2 style="font-family:'Plus Jakarta Sans',sans-serif; font-size:1.1rem; font-weight:800; color:#8b5cf6;">Junospace</h2>
+    </div>
+    <button onclick="toggleTheme()" class="ms" style="color:#64748b; background:none; border:none; cursor:pointer;">contrast</button>
+  </header>
+
+  <!-- ── SIDEBAR ── -->
+  <aside id="sidebar">
+    <div class="sb-logo">
+      <img src="logo.png" class="sb-logo-icon" alt="Junospace Logo"/>
+      <div>
+        <div class="sb-logo-text">Junospace</div>
+        <div class="sb-logo-sub">COMMAND CENTER</div>
+      </div>
+    </div>
+    
+    <nav class="sb-nav">
+      <button class="nav-btn active" data-page="dashboard" onclick="navigateTo('dashboard')">
+        <span class="ms">dashboard</span> Dashboard
+      </button>
+      <button class="nav-btn" data-page="courses" onclick="navigateTo('courses')">
+        <span class="ms">school</span> My Courses
+      </button>
+      <button class="nav-btn" data-page="leaderboard" onclick="navigateTo('leaderboard')">
+        <span class="ms">lightbulb</span> Innovation Board
+      </button>
+      <button class="nav-btn" data-page="analytics" onclick="navigateTo('analytics')">
+        <span class="ms">analytics</span> Analytics
+      </button>
+      <button class="nav-btn" data-page="profile" onclick="navigateTo('profile')">
+        <span class="ms">person</span> Profile
+      </button>
+    </nav>
+
+    <div class="sb-bottom">
+      <div class="sb-user">
+        <img class="sb-avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMUNOA_JYlU8tYWUwCNwgdbyzaOAEgHoKPqYmSXxZMzgqg6cWHnlw0wKdwhazuPwmXrRJa3zuoih2PTSZZzn0-OatenB93wAUtji6K_h-FwrblfRo5dgoWdQTmy4YH7YLmYpaQFNvsh7f0WWq4ixLJXl__qRzH-TqAQIALni0r0WiEynF-n2iXJK9EXhCIXFPaTh5KYZJCxrVRi0F9IEvdcq38Si_CrEfg6tie98tOx5gzUpu7-8nehZRXlq4DOu7fFzKbs3KmP8" alt="User"/>
+        <div>
+          <div class="sb-name">Alex Chen</div>
+          <div class="sb-role">Level 42 Architect</div>
+        </div>
+        <button class="sb-logout" onclick="doLogout()" title="Sign Out"><span class="ms" style="font-size:18px;">logout</span></button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT AREA ── -->
+  <div id="portal-main">
+    <!-- Desktop Global Header -->
+    <header id="portal-header">
+      <button class="back-btn" onclick="goBack()" title="Go Back">
+        <span class="ms">arrow_back_ios</span> Back
+      </button>
+      <div class="header-title" id="page-title">Dashboard</div>
+      
+      <div class="header-actions">
+        <span class="ms action-icon" onclick="showToast('No new notifications')">notifications</span>
+        <div class="action-sep"></div>
+        <img src="theme-bg.png" alt="Profile" style="width:34px;height:34px;border-radius:50%;object-fit:cover;cursor:pointer;border:2px solid #70ACE0;" onclick="navigateTo('profile')"/>
+      </div>
+    </header>
+
+    <div id="content-area">
+      <div id="overlay"><div class="spinner"></div></div>
+      <iframe id="content-frame" src="" title="Page Content"></iframe>
+    </div>
+  </div>
+
+  <!-- Mobile Bottom Nav -->
+  <nav id="mobile-nav">
+    <button class="mn-btn active" data-page="dashboard" onclick="navigateTo('dashboard')">
+        <span class="ms">dashboard</span>
+        <span>Home</span>
+    </button>
+    <button class="mn-btn" data-page="courses" onclick="navigateTo('courses')">
+        <span class="ms">school</span>
+        <span>Courses</span>
+    </button>
+    <button class="mn-btn" data-page="leaderboard" onclick="navigateTo('leaderboard')">
+        <span class="ms">lightbulb</span>
+        <span>Board</span>
+    </button>
+    <button class="mn-btn" data-page="analytics" onclick="navigateTo('analytics')">
+        <span class="ms">analytics</span>
+        <span>Stats</span>
+    </button>
+    <button class="mn-btn" data-page="profile" onclick="navigateTo('profile')">
+        <span class="ms">person</span>
+        <span>Profile</span>
+    </button>
+  </nav>
+</div>
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<script>
+  // ── page map ──
+  const PAGES = {
+    dashboard:   'student_dashboard_dark_mode/code.html',
+    courses:     'course_detail_page/code.html',
+    materials:   'learning_materials_light_mode/code.html',
+    assignments: 'assignments_library/code.html',
+    assessments: 'assessments_light_mode/code.html',
+    assessment:  'weekly_assessment/code.html',
+    roadmap:     'celestial_roadmap_dark_mode/code.html',
+    leaderboard: 'global_leaderboard_2/code.html',
+    analytics:   'analytics_page_dark_mode/code.html',
+    profile:     'student_profile/code.html',
+    textme:      'text_me_dark_mode/code.html',
+  };
+
+  const PAGE_TITLES = {
+    dashboard:   'Student Dashboard',
+    courses:     'My Courses',
+    leaderboard: 'Innovation Board',
+    analytics:   'Performance Analytics',
+    profile:     'Student Profile',
+    textme:      'Messages',
+    roadmap:     'Learning Roadmap',
+    assignments: 'Assignments Library',
+    assessments: 'Course Assessments',
+  };
+
+  let currentPage = null;
+  let historyStack = [];
+  const frame     = document.getElementById('content-frame');
+  const overlay   = document.getElementById('overlay');
+  const toastEl   = document.getElementById('toast');
+  const pageTitle = document.getElementById('page-title');
+
+  // ── go back logic ──
+  function goBack() {
+    if (historyStack.length <= 1) {
+        showToast('Already at Home');
+        return;
+    }
+    // Remove current page
+    historyStack.pop();
+    // Get previous page
+    const prev = historyStack.pop();
+    // Navigate to previous (this will push it back on)
+    navigateTo(prev);
+  }
+
+  // ── toast ──
+  let toastT;
+  function showToast(msg) {
+    clearTimeout(toastT);
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    toastT = setTimeout(()=>toastEl.classList.remove('show'), 2800);
+  }
+
+  // ── navigate — called from sidebar buttons (same document!) ──
+  function navigateTo(key) {
+    if (!PAGES[key]) { showToast('Page not found'); return; }
+    if (key === currentPage) return;
+    currentPage = key;
+    historyStack.push(key);
+
+    // update title
+    if (pageTitle) pageTitle.textContent = PAGE_TITLES[key] || 'Junospace';
+
+    // update sidebar/mobile nav highlight
+    document.querySelectorAll('.nav-btn, .mn-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.page === key);
+    });
+
+    // show spinner, load page
+    overlay.classList.add('show');
+    frame.src = PAGES[key];
+  }
+
+  // hide spinner when iframe finishes loading
+  frame.addEventListener('load', () => {
+    setTimeout(() => overlay.classList.remove('show'), 200);
+  });
+
+  // ── login ──
+  function doLogin() {
+    document.getElementById('login-wrap').classList.remove('show');
+    document.getElementById('portal').classList.add('show');
+    navigateTo('dashboard');
+    showToast('✅ Welcome back, Alex!');
+  }
+
+  function requestPasswordReset(e) {
+    e.preventDefault();
+    const emailInput = document.getElementById('uid').value;
+    if(!emailInput) {
+        showToast('⚠️ Please enter your Student ID or Email first.');
+        return;
+    }
+    const btn = e.target;
+    btn.innerText = 'Sending...';
+    btn.style.pointerEvents = 'none';
+    setTimeout(() => {
+        btn.innerText = 'Request Sent';
+        showToast(`✅ Password reset request for ${emailInput} sent to Admin.`);
+        setTimeout(() => {
+            btn.innerText = 'Forgot?';
+            btn.style.pointerEvents = 'auto';
+        }, 3000);
+    }, 1200);
+  }
+
+  // ── logout ──
+  function doLogout() {
+    document.getElementById('portal').classList.remove('show');
+    document.getElementById('login-wrap').classList.add('show');
+    currentPage = null;
+    frame.src = '';
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelector('[data-page="dashboard"]').classList.add('active');
+    showToast('You have been signed out.');
+  }
+
+  // ── expose for child iframes (sub-page tabs, Text Me, etc.) if they can access parent directly ──
+  window.navigateTo = navigateTo;
+  window.doLogout   = doLogout;
+
+  // ── postMessage listener for cross-frame navigation across file:// protocol ──
+  window.addEventListener('message', function(event) {
+    if (event.data && event.data.action === 'navigate' && event.data.page) {
+      navigateTo(event.data.page);
+    } else if (event.data && event.data.action === 'logout') {
+      doLogout();
+    }
+  });
+
+  // ── theme engine ──
+  function applyGlobalTheme() {
+    const theme = localStorage.getItem('junospace-theme') || 'light';
+    const isDark = theme === 'dark';
+    document.documentElement.classList.toggle('dark-mode', isDark);
+    
+    // Sync theme to iframe
+    if(frame && frame.contentWindow) {
+      frame.contentWindow.postMessage({ action: 'themeUpdate', theme: theme }, '*');
+    }
+  }
+
+  function toggleTheme() {
+    const current = localStorage.getItem('junospace-theme') || 'light';
+    const next = current === 'light' ? 'dark' : 'light';
+    localStorage.setItem('junospace-theme', next);
+    applyGlobalTheme();
+    showToast(`🌙 Switched to ${next.toUpperCase()} Mode`);
+  }
+
+  // Initial apply
+  applyGlobalTheme();
+
+  // ── boot: show login after 2 s loading screen ──
+  setTimeout(()=>{
+    applyGlobalTheme(); // re-verify theme on show
+    const ls = document.getElementById('loading');
+    ls.style.opacity='0';
+    setTimeout(()=>{
+      ls.style.display='none';
+      document.getElementById('portal').classList.remove('show');
+      document.getElementById('portal').style.display='none';
+      document.getElementById('login-wrap').classList.add('show');
+    }, 600);
+  }, 2000);
+</script>
+</body>
+</html>
+
+
+

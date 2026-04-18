@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Junospace Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; font-weight: 300; }
+        h1, h2, h3, h4, .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 900; }
+        
+        /* Premium Dark Mode Overrides */
+        .dark body { background-color: #000000; color: #ffffff; }
+        .dark .bg-white { background-color: #0a0a0a !important; }
+        .dark .text-slate-800, .dark .text-slate-700, .dark .text-slate-900 { color: #ffffff !important; }
+        .dark .text-slate-600, .dark .text-slate-500 { color: #cbd5e1 !important; }
+        .dark .text-slate-400 { color: #94a3b8 !important; }
+        .dark .border-slate-100, .dark .border-violet-100 { border-color: rgba(139, 92, 246, 0.2) !important; }
+        .dark .border-violet-300 { border-color: rgba(139, 92, 246, 0.4) !important; }
+        .dark .bg-slate-50 { background-color: #000000 !important; }
+        .dark .bg-violet-50 { background-color: #1e1b4b !important; }
+        .dark .shadow-sm, .dark .shadow-xl { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important; }
+    </style>
+    <script>
+        function applyTheme() {
+            const theme = localStorage.getItem('junospace-theme') || 'light';
+            document.documentElement.classList.toggle('dark', theme === 'dark');
+        }
+        window.addEventListener('storage', applyTheme);
+        window.addEventListener('message', (e) => {
+            if (e.data.action === 'themeUpdate') applyTheme();
+        });
+        applyTheme();
+    </script>
+</head>
+<script>/* In-frame sidebar suppression */
+(function(){
+  if(window.self!==window.top){
+    document.documentElement.classList.add('in-frame');
+    // inject override styles immediately
+    var s=document.createElement('style');
+    s.textContent='html.in-frame aside,html.in-frame [class*="w-64"][class*="fixed"],html.in-frame [class*="w-72"][class*="fixed"]{display:none!important;}html.in-frame main,[class*="ml-64"],[class*="ml-72"]{margin-left:0!important;}html.in-frame header,html.in-frame .fixed.top-0{display:none!important;}html.in-frame [class*="md:pl-"]{padding-left:1.5rem!important;}html.in-frame [class*="md:ml-"]{margin-left:0!important;}html.in-frame nav.fixed.bottom-0, html.in-frame button.fixed.bottom-8, html.in-frame nav.md\\:hidden{display:none!important;}html.in-frame [class*="pt-"]{padding-top:1.5rem!important;}';
+    document.head.appendChild(s);
+  }
+})();
+</script>
+<body class="bg-slate-50 text-slate-800">
+<!-- SideNavBar Shell -->
+<aside class="fixed left-0 top-0 h-screen w-72 rounded-r-[2rem] bg-slate-50 flex flex-col py-8 px-4 space-y-2 z-50">
+<div class="px-4 mb-8">
+<div class="flex items-center gap-3"><img src="../logo.png" class="w-8 h-8 object-contain drop-shadow-md" alt="Junospace Logo" /><h1 class="text-xl font-bold text-violet-700 tracking-tighter">Junospace</h1></div>
+<p class="text-xs font-semibold tracking-tight text-slate-500 font-['Plus_Jakarta_Sans']">Command Center</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:text-violet-600 hover:bg-slate-200/50 transition-all duration-200 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-tight text-sm">Dashboard</span>
+</a>
+<!-- My Courses -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:text-violet-600 hover:bg-slate-200/50 transition-all duration-200 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">school</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-tight text-sm">My Courses</span>
+</a>
+<!-- Assessments (Active) -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-violet-700 font-bold border-r-4 border-violet-600 bg-violet-50/50 scale-95 active:scale-90 transition-all" href="#">
+<span class="material-symbols-outlined">quiz</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-tight text-sm">Assessments</span>
+</a>
+<!-- Learning Materials -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:text-violet-600 hover:bg-slate-200/50 transition-all duration-200 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-tight text-sm">Learning Materials</span>
+</a>
+<!-- Analytics -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:text-violet-600 hover:bg-slate-200/50 transition-all duration-200 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-tight text-sm">Analytics</span>
+</a>
+<!-- Profile -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-500 hover:text-violet-600 hover:bg-slate-200/50 transition-all duration-200 scale-95 active:scale-90" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-tight text-sm">Profile</span>
+</a>
+</nav>
+<div class="mt-auto px-4 pt-4 border-t border-slate-100 flex items-center gap-3">
+<img alt="Student Profile Avatar" class="w-10 h-10 rounded-full object-cover" data-alt="portrait of a focused young man with glasses sitting in a brightly lit modern library environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAQE4aEiGK-BHkyaab9-xznWA7zJleO3e-3prl_zlE4cbeHaHK1-GIiNUr-K_9RodXXwIkk5H7ZDxxmB9Rzl6z6F5qTkeg0kx2cmOFSrGcs3SodLoP2U9E9RnCWz9Jl-d9h-hGFVt_LwXPrAIDjomSzY6LLco2ajvWkxgL1r_7RhkAQQYunHI6nYS8_VI6zJM9AQwCrrPhXQWeKjXTQKv8Caoyr6Q8WlHlxhr1FXzcvL-lKXGD8h1nbBVQxkqTkOVTZGIq-PBR2PEM"/>
+<div>
+<p class="text-xs font-bold text-slate-800">Alex Chen</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-wider">Level 24 Scholar</p>
+</div>
+</div>
+</aside>
+<!-- TopNavBar Shell -->
+<header class="fixed top-0 right-0 left-72 h-16 z-40 flex items-center justify-between px-8 bg-white/80 backdrop-blur-xl border-b border-violet-300 shadow-sm shadow-violet-100 shadow-sm">
+<div class="flex items-center gap-2">
+
+</div>
+<div class="flex items-center gap-6">
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-3 text-outline text-sm">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-slate-50 border-none rounded-full text-sm focus:ring-2 focus:ring-violet-500 w-64" placeholder="Search tests..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-600 hover:text-violet-600 transition-colors active:opacity-70">notifications</button>
+<button class="material-symbols-outlined text-slate-600 hover:text-violet-600 transition-colors active:opacity-70">settings</button>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-72 pt-24 pb-12 px-8 min-h-screen">
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6 items-start">
+<!-- Left Column: Weekly Tests List -->
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<div class="flex flex-col gap-2">
+<h2 class="text-2xl font-extrabold tracking-tight font-headline">Weekly Assignment</h2>
+<p class="text-slate-500 text-sm">Challenge your mastery and unlock new roadmap nodes.</p>
+</div>
+<div class="space-y-4">
+<!-- Assessment Card: Completed -->
+<div class="bg-white p-6 rounded-lg shadow-[0_20px_40px_rgba(71,70,85,0.06)] border-l-8 border-secondary group hover:-translate-y-1 transition-all">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Completed</span>
+<span class="text-secondary font-bold text-lg">94%</span>
+</div>
+<h3 class="font-headline font-bold text-slate-800 mb-1">Algorithm Efficiency (Big O)</h3>
+<p class="text-xs text-slate-500 mb-4">Focus: Time &amp; Space Complexity, Sorting</p>
+<div class="flex items-center gap-4 text-[11px] text-outline font-medium">
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">timer</span> 45m</div>
+<div class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">fact_check</span> 15 MCQs</div>
+</div>
+</div>
+<!-- Assessment Card: In Progress -->
+<div class="bg-white p-6 rounded-lg shadow-[0_20px_40px_rgba(71,70,85,0.06)] border-l-8 border-violet-600 group hover:-translate-y-1 transition-all">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-violet-100/20 text-violet-600 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">In Progress</span>
+<span class="text-violet-600 font-bold text-lg">12/30m</span>
+</div>
+<h3 class="font-headline font-bold text-slate-800 mb-1">Advanced React Patterns</h3>
+<p class="text-xs text-slate-500 mb-4">Focus: Compound Components, HOCs, Hooks</p>
+<button class="w-full py-2 bg-violet-600 text-white rounded-full text-xs font-bold shadow-lg shadow-violet-200 transition-transform active:scale-95" onclick="window.parent.postMessage({action:'navigate',page:'assessment'},'*')">Resume Quest</button>
+</div>
+<!-- Assessment Card: Not Attempted -->
+<div class="bg-slate-50 p-6 rounded-lg border-l-8 border-outline-variant hover:bg-white hover:shadow-[0_20px_40px_rgba(71,70,85,0.06)] transition-all">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Not Attempted</span>
+</div>
+<h3 class="font-headline font-bold text-slate-800 mb-1">System Design: Scalability</h3>
+<p class="text-xs text-slate-500 mb-4">Focus: Load Balancing, Caching, Databases</p>
+<button class="w-full py-2 bg-white text-violet-700 border border-violet-100 rounded-full text-xs font-bold hover:bg-violet-50 transition-all" onclick="window.parent.postMessage({action:'navigate',page:'assessment'},'*')">Start Assessment</button>
+</div>
+<!-- Assessment Card: Not Attempted -->
+<div class="bg-slate-50 p-6 rounded-lg border-l-8 border-outline-variant transition-all opacity-70">
+<div class="flex justify-between items-start mb-4">
+<span class="bg-slate-100 text-slate-500 px-3 py-1 rounded-full text-[10px] font-bold tracking-widest uppercase">Locked</span>
+<span class="material-symbols-outlined text-outline">lock</span>
+</div>
+<h3 class="font-headline font-bold text-slate-800 mb-1">Microservices Architecture</h3>
+<p class="text-xs text-slate-500">Available after Roadmap Level 30</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Focused Preview & Stats -->
+<div class="col-span-12 lg:col-span-8 space-y-6">
+<!-- Interface Preview: Active Test Mockup -->
+<div class="bg-white rounded-lg overflow-hidden shadow-[0_30px_60px_rgba(71,70,85,0.08)]">
+<!-- Preview Header -->
+<div class="bg-violet-900 text-violet-800 p-6 flex justify-between items-center rounded-t-lg">
+<div>
+<h3 class="font-headline font-black text-white text-xl">Full Stack Integration Test</h3>
+<p class="text-violet-200 text-xs mt-1 font-light">Question 4 of 20 • Module 4: API Security</p>
+</div>
+<div class="bg-white/10 backdrop-blur-md px-5 py-2.5 rounded-2xl flex items-center gap-3 border border-white/10">
+<span class="material-symbols-outlined text-sm text-white">timer</span>
+<span class="font-mono font-black text-white tracking-widest text-lg" id="timer-display">59:42</span>
+</div>
+</div>
+<div class="p-8">
+<!-- MCQ Question Mock -->
+<div class="mb-8">
+<div class="inline-block px-3 py-1 rounded-full bg-violet-50 text-violet-700 text-[10px] font-bold uppercase mb-3">Multiple Choice</div>
+<h4 class="text-lg font-bold text-slate-800 mb-6">Which of the following describes the 'Idempotency' property in a RESTful API?</h4>
+<div class="grid grid-cols-1 gap-3">
+<div class="p-4 rounded-xl bg-slate-50 border-2 border-transparent hover:border-violet-200 transition-all cursor-pointer flex items-center gap-4">
+<div class="w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center"></div>
+<span class="text-sm font-medium">The ability to send a request multiple times without changing the result beyond the initial application.</span>
+</div>
+<div class="p-4 rounded-xl bg-violet-50 border-2 border-violet-500 transition-all cursor-pointer flex items-center gap-4">
+<div class="w-5 h-5 rounded-full bg-violet-600 flex items-center justify-center">
+<div class="w-2 h-2 bg-white rounded-full"></div>
+</div>
+<span class="text-sm font-bold text-violet-900">Ensuring that the server session remains active during multiple requests from the same client.</span>
+</div>
+<div class="p-4 rounded-xl bg-slate-50 border-2 border-transparent hover:border-violet-200 transition-all cursor-pointer flex items-center gap-4">
+<div class="w-5 h-5 rounded-full border-2 border-outline flex items-center justify-center"></div>
+<span class="text-sm font-medium">The process of encrypting API keys before they are stored in the local storage of the browser.</span>
+</div>
+</div>
+</div>
+<!-- Coding Preview Small -->
+<div class="rounded-xl border border-violet-300 shadow-sm shadow-violet-100 p-6 bg-slate-50">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-violet-600">code</span>
+<span class="text-xs font-bold text-slate-800 uppercase tracking-tight">Coding Sandbox Preview</span>
+</div>
+<span class="text-[10px] bg-slate-200 px-2 py-0.5 rounded text-slate-600 font-mono">index.js</span>
+</div>
+<div class="bg-slate-900 rounded-lg p-4 font-mono text-xs text-violet-300 leading-relaxed">
+<p><span class="text-violet-400">function</span> <span class="text-teal-400">validateToken</span>(token) {</p>
+<p class="pl-4 text-slate-400">// TODO: Implement JWT verification logic</p>
+<p class="pl-4"><span class="text-violet-400">return</span> token === <span class="text-orange-300">'SECRET_ACADEMY'</span>;</p>
+<p>}</p>
+</div>
+</div>
+<!-- Footer: Navigation & Submit -->
+<div class="mt-8 flex justify-between items-center">
+    <div class="flex gap-2">
+        <button class="px-6 py-2 bg-slate-100 text-slate-600 rounded-full text-xs font-medium hover:bg-slate-200 transition-all">Previous</button>
+        <button class="px-6 py-2 bg-violet-50 text-violet-700 rounded-full text-xs font-medium hover:bg-violet-100 transition-all">Next</button>
+    </div>
+    <button class="px-8 py-3 bg-violet-600 text-white rounded-full text-sm font-black shadow-lg shadow-violet-500/20 active:scale-95 transition-all" onclick="window.parent.postMessage({action:'toast', text:'Assessment results submitted successfully!'},'*')">SUBMIT TEST</button>
+</div>
+</div>
+</div>
+<!-- Post-Submission Feedback Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Performance Analytics -->
+<div class="bg-slate-50 p-8 rounded-lg relative overflow-hidden group">
+<div class="relative z-10">
+<h3 class="font-headline font-extrabold text-slate-800 text-xl mb-2">Weak Areas</h3>
+<p class="text-xs text-slate-500 mb-6">Based on your last 3 attempts.</p>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs font-bold mb-2">
+<span>Graph Theory</span>
+<span class="text-error">Needs Review</span>
+</div>
+<div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-error w-[35%]"></div>
+</div>
+</div>
+<div>
+<div class="flex justify-between text-xs font-bold mb-2">
+<span>Async/Await</span>
+<span class="text-tertiary">Improving</span>
+</div>
+<div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary w-[65%]"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="absolute -bottom-8 -right-8 opacity-5 transform group-hover:scale-110 transition-transform duration-700">
+<span class="material-symbols-outlined text-[160px]">monitoring</span>
+</div>
+</div>
+<!-- AI Suggestions -->
+<div class="bg-violet-600 text-white p-8 rounded-lg relative overflow-hidden group">
+<div class="relative z-10">
+<div class="flex items-center gap-2 mb-2">
+<span class="material-symbols-outlined text-secondary-fixed">lightbulb</span>
+<h3 class="font-headline font-extrabold text-xl">Scholar's Path</h3>
+</div>
+<p class="text-xs text-violet-800/80 mb-6">Personalized study trajectory generated for you.</p>
+<ul class="space-y-3">
+<li class="flex items-start gap-3 bg-white/10 p-3 rounded-xl backdrop-blur-sm border border-white/5">
+<span class="material-symbols-outlined text-sm mt-0.5">menu_book</span>
+<span class="text-[11px] leading-tight font-medium">Read "Pragmatic Graph Theory" Chapter 4 before next test.</span>
+</li>
+<li class="flex items-start gap-3 bg-white/10 p-3 rounded-xl backdrop-blur-sm border border-white/5">
+<span class="material-symbols-outlined text-sm mt-0.5">smart_display</span>
+<span class="text-[11px] leading-tight font-medium">Watch the "Async Lifecycle" workshop by Mentor Sarah.</span>
+</li>
+</ul>
+</div>
+<!-- Gradient Glow -->
+<div class="absolute -top-24 -left-24 w-64 h-64 bg-violet-400/20 blur-3xl rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>
+
+
+
+
+

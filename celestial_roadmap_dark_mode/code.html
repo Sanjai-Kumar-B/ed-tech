@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Junospace - Celestial Roadmap</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+
+<style>
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #1e293b; font-weight: 300; }
+    h1, h2, h3, h4 { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 900; }
+    .nebula-glow {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at 10% 10%, rgba(124, 58, 237, 0.03) 0%, transparent 40%),
+                  radial-gradient(circle at 90% 90%, rgba(13, 148, 136, 0.03) 0%, transparent 40%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .node-details {
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .node-active .node-details {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s, color 0.3s; }
+        
+        /* Premium Dark Mode Overrides */
+        .dark body { background-color: #000000; color: #ffffff; }
+        .dark .bg-white { background-color: #0a0a0a !important; }
+        .dark .bg-slate-50 { background-color: #111111 !important; }
+        .dark .border-slate-100 { border-color: rgba(255,255,255,0.08) !important; }
+        .dark .text-slate-500 { color: #94a3b8 !important; }
+        .dark .text-slate-400 { color: #cbd5e1 !important; }
+        .dark .border-slate-100 { border-color: rgba(255,255,255,0.08) !important; }
+        .dark .border-violet-300 { border-color: rgba(139,92,246,0.3) !important; }
+        .dark .bg-slate-50 { background-color: #1e293b !important; }
+        .dark .shadow-sm, .dark .shadow-xl { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5) !important; }
+    </style>
+    <script>
+        function applyTheme() {
+            const theme = localStorage.getItem('junospace-theme') || 'light';
+            document.documentElement.classList.toggle('dark', theme === 'dark');
+        }
+        window.addEventListener('storage', applyTheme);
+        window.addEventListener('message', (e) => {
+            if (e.data.action === 'themeUpdate') applyTheme();
+        });
+        applyTheme();
+    </script>
+<script>/* In-frame sidebar suppression */
+(function(){
+  if(window.self!==window.top){
+    document.documentElement.classList.add('in-frame');
+    // inject override styles immediately
+    var s=document.createElement('style');
+    s.textContent='html.in-frame aside,html.in-frame [class*="w-64"][class*="fixed"],html.in-frame [class*="w-72"][class*="fixed"]{display:none!important;}html.in-frame main,[class*="ml-64"],[class*="ml-72"]{margin-left:0!important;}html.in-frame header,html.in-frame .fixed.top-0{display:none!important;}html.in-frame [class*="md:pl-"]{padding-left:1.5rem!important;}html.in-frame [class*="md:ml-"]{margin-left:0!important;}html.in-frame nav.fixed.bottom-0, html.in-frame button.fixed.bottom-8, html.in-frame nav.md\\:hidden{display:none!important;}html.in-frame [class*="pt-"]{padding-top:1.5rem!important;}';
+    document.head.appendChild(s);
+  }
+})();
+</script>
+<body class="bg-slate-50 text-on-background antialiased selection:bg-violet-100 selection:text-violet-800">
+<!-- Side Navigation Shell -->
+<aside class="fixed top-0 left-0 h-screen w-72 rounded-r-[2rem] bg-white border-r border-slate-100 flex flex-col py-8 px-4 space-y-2 z-50">
+<div class="mb-8 px-4">
+<div class="flex items-center gap-3"><img src="../logo.png" class="w-8 h-8 object-contain drop-shadow-md" alt="Junospace Logo" /><h1 class="text-xl font-bold text-violet-700 tracking-tighter">Junospace</h1></div>
+<p class="text-xs font-semibold tracking-tight text-slate-500 uppercase mt-1">Command Center</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 rounded-xl group" href="#" onclick="window.parent.postMessage({action:'navigate', page:'dashboard'}, '*')">
+<span class="material-symbols-outlined group-hover:text-violet-600" data-icon="dashboard">dashboard</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 rounded-xl group" href="#" onclick="window.parent.postMessage({action:'navigate', page:'courses'}, '*')">
+<span class="material-symbols-outlined group-hover:text-violet-600" data-icon="school">school</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold text-sm">My Courses</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-violet-700 font-bold border-r-4 border-violet-600 bg-violet-50 transition-all duration-200 rounded-xl" href="#">
+<span class="material-symbols-outlined" data-icon="map">map</span>
+<span class="font-['Plus_Jakarta_Sans'] text-sm">Roadmap</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 rounded-xl group" href="#" onclick="window.parent.postMessage({action:'navigate', page:'library'}, '*')">
+<span class="material-symbols-outlined group-hover:text-violet-600" data-icon="auto_stories">auto_stories</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold text-sm">Library</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 rounded-xl group" href="#" onclick="window.parent.postMessage({action:'navigate', page:'assignments'}, '*')">
+<span class="material-symbols-outlined group-hover:text-violet-600" data-icon="upload_file">upload_file</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold text-sm">Assignment Submission</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-slate-50 transition-all duration-200 rounded-xl group" href="#" onclick="window.parent.postMessage({action:'navigate', page:'assessments'}, '*')">
+<span class="material-symbols-outlined group-hover:text-violet-600" data-icon="quiz">quiz</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold text-sm">Assessments</span>
+</a>
+</nav>
+<div class="mt-auto px-4 pt-4 border-t border-slate-100">
+<div class="flex items-center gap-3 cursor-pointer" onclick="window.parent.postMessage({action:'navigate', page:'profile'}, '*')">
+<img class="w-10 h-10 rounded-full object-cover border-2 border-violet-100" data-alt="Portrait of a young male student" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMz9-Tm8so-kxC6PsfF-vh8G1JU9rFgtICD4czVTVgj9WVZIf3cJC789kXzpf9YA19j-bu5-cs1LgZOfkXauCCqbEDK7b0C5Mvhf5jdNIfKEzPtb8vwwSPXhXxZHzV4kRcGGleOdAARbCNMtVgSQwv0R2HaeIudTrmclARNhFuKZ6SArnV_Sr22P9opcXHX1XubVlaAWzfSE4YLGb74XQfvqRcx7qFT6YLnvfflSp5wsv1qWTkArjHO-W3lYjPvWAF1Loe8nZILWg"/>
+<div>
+<p class="text-sm font-bold text-slate-800">Alex Chen</p>
+<p class="text-xs text-slate-500 font-medium">Level 14 Voyager</p>
+</div>
+</div>
+</div>
+</aside>
+<header class="fixed top-0 right-0 left-72 h-16 bg-white/80 backdrop-blur-xl z-40 flex items-center justify-between px-8 border-b border-slate-100 shadow-sm">
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm" data-icon="search">search</span>
+<input class="bg-slate-100 border-none rounded-full pl-10 pr-4 py-2 text-xs text-slate-600 w-64 focus:ring-2 focus:ring-violet-200 transition-all font-medium" placeholder="Search roadmap nodes..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative text-slate-400 hover:text-violet-600 transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+</button>
+<button class="text-slate-400 hover:text-violet-600 transition-all">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-72 pt-16 min-h-screen relative overflow-hidden bg-slate-50">
+<div class="nebula-glow"></div>
+<!-- Welcome Overlay -->
+<div class="max-w-4xl mx-auto px-10 pt-10 relative z-10">
+<div class="bg-white border border-slate-100 rounded-3xl p-8 flex items-center justify-between shadow-xl relative overflow-hidden group">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 bg-violet-600 text-white rounded-2xl flex items-center justify-center shadow-lg shadow-violet-200">
+<span class="material-symbols-outlined text-4xl" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<div>
+<h2 class="text-3xl font-extrabold tracking-tight text-slate-800">Welcome to Juno House</h2>
+<p class="text-slate-500 font-medium">Ready to explore the next frontier of your academic journey?</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Roadmap Container -->
+<div class="relative max-w-4xl mx-auto py-24 flex flex-col items-center">
+<!-- SVG Connection Lines -->
+<svg class="absolute top-0 left-0 w-full h-full pointer-events-none z-0 overflow-visible" fill="none" viewbox="0 0 400 1200">
+<path d="M200,50 Q280,150 200,250 T200,450 T200,650 T200,850 T200,1050" stroke="#e2e8f0" stroke-dasharray="8 8" stroke-width="3"></path>
+</svg>
+<!-- Roadmap Nodes -->
+<div class="space-y-48 w-full relative z-10">
+<!-- Node 1: Completed -->
+<div class="flex justify-center -translate-x-12">
+<div class="relative roadmap-node group cursor-pointer" onclick="openDetails('Python Foundation', 'Welcome to the core! Master syntax, logic, and automated workflows.', false)">
+<div class="relative w-32 h-32 rounded-3xl bg-white border-4 border-emerald-400 flex flex-col items-center justify-center shadow-lg hover:shadow-emerald-100 transition-all active:scale-95">
+<span class="material-symbols-outlined text-4xl text-emerald-500" data-icon="check_circle" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+<p class="text-[10px] font-black text-emerald-500 tracking-widest mt-2 uppercase">Complete</p>
+</div>
+</div>
+</div>
+<!-- Node 2: Active -->
+<div class="flex justify-center translate-x-16">
+<div class="relative roadmap-node group cursor-pointer" onclick="openDetails('AI Basics', 'Welcome Voyager! Neural Networks 101: Understanding the brain-machine interface.', false)">
+<div class="absolute -inset-10 bg-violet-100 rounded-full blur-3xl opacity-50 animate-pulse"></div>
+<div class="relative w-40 h-40 rounded-3xl bg-violet-600 border-4 border-white flex flex-col items-center justify-center shadow-2xl shadow-violet-200 transition-all hover:scale-105 active:scale-95">
+<div class="bg-amber-400 text-white p-1.5 rounded-full absolute -top-4 -right-4 shadow-lg border-2 border-white">
+<span class="material-symbols-outlined text-[14px]" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<span class="material-symbols-outlined text-5xl text-white" data-icon="psychology">psychology</span>
+<p class="text-xs font-black text-white/90 mt-2 tracking-widest uppercase">In Progress</p>
+</div>
+</div>
+</div>
+<!-- Node 3: Locked -->
+<div class="flex justify-center -translate-x-8">
+<div class="relative roadmap-node group opacity-60 hover:opacity-100 transition-opacity cursor-pointer" onclick="openDetails('Build Project', 'Locked for now. Complete AI Basics to unlock your first deployment project.', true)">
+<div class="relative w-32 h-32 rounded-3xl bg-white border-4 border-slate-200 flex flex-col items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-4xl text-slate-300" data-icon="lock">lock</span>
+<p class="text-[10px] font-black text-slate-300 tracking-widest mt-2 uppercase">Locked</p>
+</div>
+</div>
+</div>
+<!-- Node 4: Locked -->
+<div class="flex justify-center translate-x-12">
+<div class="relative roadmap-node group opacity-40 hover:opacity-80 transition-opacity cursor-pointer" onclick="openDetails('Neural Nexus', 'The Grand Finale. Unlock all previous nodes to witness the singularity.', true)">
+<div class="relative w-32 h-32 rounded-3xl bg-white border-4 border-slate-100 flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-slate-200" data-icon="stars">stars</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Side Sidebar -->
+<div class="fixed top-24 right-8 w-80 space-y-6">
+<!-- Player Stats Card -->
+<div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-xl">
+<div class="flex items-center justify-between mb-6">
+<h4 class="font-headline font-bold text-slate-800">Expedition Stats</h4>
+<span class="material-symbols-outlined text-violet-600" data-icon="insights">insights</span>
+</div>
+<div class="space-y-4">
+<div>
+<div class="flex justify-between text-xs mb-2">
+<span class="text-slate-500 font-bold uppercase tracking-widest">Streak</span>
+<span class="text-emerald-500 font-black">12 Days</span>
+</div>
+<div class="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+<div class="bg-emerald-400 h-full w-[80%] rounded-full"></div>
+</div>
+</div>
+<div class="flex items-center justify-between gap-4">
+<div class="text-center bg-slate-50 p-4 rounded-3xl border border-slate-100 flex-1">
+<p class="text-[10px] text-slate-400 uppercase font-black tracking-tighter">Rank</p>
+<p class="text-2xl font-headline font-extrabold text-slate-800">#42</p>
+</div>
+<div class="text-center bg-slate-50 p-4 rounded-3xl border border-slate-100 flex-1">
+<p class="text-[10px] text-slate-400 uppercase font-black tracking-tighter">Badges</p>
+<p class="text-2xl font-headline font-extrabold text-slate-800">08</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Voyagers Activity -->
+<div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-xl">
+<h4 class="font-headline font-bold text-[10px] text-slate-400 uppercase tracking-widest mb-6 px-1">Voyagers Nearby</h4>
+<div class="space-y-5">
+<div class="flex items-center gap-4 group cursor-pointer hover:translate-x-1 transition-transform">
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full border-2 border-emerald-400 shadow-sm" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBil7vVpV64qzUBVCLgez5kN5ImIofg3zwk6LirI6wrEvXylyIJ9KrlaVgN6vbsHI8gc1gh3Z1iSDZ3P9moLGem-tINNSYYCLQw-GuCILdx7nTGQ6HVb4eIVYyF6HYnbJp2j1GXmpZ-_9QfUawxffTEic9k2tXE9VTqJXSWXt0mgVLUse824ut6KSmX-TtQZ5r5ksUwsnjSIAMtZOW65LbNpIsyurEhMjDewmtMjfT5zJw7Q18tG010h3pMrda8r7kU91H8j0jeF_U"/>
+<div class="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white"></div>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-800">Elena V.</p>
+<p class="text-[10px] text-slate-500 font-medium">Coding Python Foundation</p>
+</div>
+</div>
+<div class="flex items-center gap-4 opacity-70 grayscale hover:grayscale-0 transition-all cursor-pointer">
+<div class="relative shrink-0">
+<img class="w-10 h-10 rounded-full border-2 border-slate-200" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDJVjQYKekbI1tjA2XKq1OcKIpAvybibmT3XyHHfqG4mvZeF4q77Q6I2TzWTV6BxVuVSFh8zVOA7e8lt82kOefpLWLuhjuZ5wmr9SbzjFrfCS4XX42S08fCHd2omHbTkDzDJySI3X74Qlm92iQPI0X3saHqdVbic02hDTXDppB0FOXjFIspO7Af6NdD9Ran3z4CGoVzOT2jC4TmYy4ISXz0Rcw4vzpqVkx_GWC4X58R1U2HqPz5rF2YYMJA4pob7rJBmoiwxQ8_UEo"/>
+</div>
+<div>
+<p class="text-sm font-bold text-slate-800">Marcus D.</p>
+<p class="text-[10px] text-slate-500 font-medium">Offline • 2h ago</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Full-Screen Overlay Modal -->
+<div id="roadmap-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-md z-[100] hidden flex items-center justify-center p-6">
+    <div class="bg-white w-full max-w-xl rounded-[2.5rem] p-12 shadow-2xl relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-violet-500 to-indigo-500"></div>
+        <button onclick="closeDetails()" class="absolute top-8 right-8 text-slate-400 hover:text-slate-800 transition-colors">
+            <span class="material-symbols-outlined text-3xl">close</span>
+        </button>
+        <div id="modal-content" class="text-center">
+            <div id="modal-icon" class="w-24 h-24 bg-violet-50 rounded-full flex items-center justify-center mx-auto mb-8">
+                <span class="material-symbols-outlined text-5xl text-violet-600">stars</span>
+            </div>
+            <h2 id="modal-title" class="text-4xl font-black text-slate-800 tracking-tighter mb-4">Module Title</h2>
+            <p id="modal-desc" class="text-lg text-slate-500 font-light leading-relaxed mb-10 mx-auto max-w-md">Detailed explanation of the module will appear here.</p>
+            <div id="modal-actions" class="flex gap-4 justify-center">
+                <button class="px-10 py-4 bg-violet-600 text-white rounded-full text-base font-black shadow-xl shadow-violet-200 hover:scale-105 active:scale-95 transition-all">START ADVENTURE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openDetails(title, desc, isLocked) {
+        document.getElementById('modal-title').textContent = title;
+        document.getElementById('modal-desc').textContent = desc;
+        const actions = document.getElementById('modal-actions');
+        if(isLocked) {
+           actions.innerHTML = '<button class="px-10 py-4 bg-slate-100 text-slate-400 rounded-full text-base font-bold cursor-not-allowed">LOCKED MISSION</button>';
+        } else {
+           actions.innerHTML = '<button class="px-10 py-4 bg-violet-600 text-white rounded-full text-base font-black shadow-xl shadow-violet-200 hover:scale-105 active:scale-95 transition-all">START ADVENTURE</button>';
+        }
+        document.getElementById('roadmap-modal').classList.remove('hidden');
+    }
+    function closeDetails() {
+        document.getElementById('roadmap-modal').classList.add('hidden');
+    }
+</script>
+</body></html>
+
+
+
+
+
